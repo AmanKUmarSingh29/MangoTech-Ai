@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/db";
 import { documents } from "@/db/schema";
 import { desc } from "drizzle-orm";
+import { CanvasFactory } from "pdf-parse/worker";
 import { PDFParse } from "pdf-parse";
 
 export async function GET() {
@@ -36,7 +37,7 @@ export async function POST(req: NextRequest) {
     let pageCount = 1;
 
     try {
-      const pdf = new PDFParse({ data: uint8 });
+      const pdf = new PDFParse({ data: uint8, CanvasFactory });
       const textResult = await pdf.getText();
       extractedText = textResult.text?.trim() || "";
       pageCount = textResult.total || 1;
